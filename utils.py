@@ -297,6 +297,8 @@ def invalid_handle_notif(handle_id) -> None:
     cur = conn.cursor()
     cur.execute(f"SELECT chat_id FROM handles WHERE handle_id = '{handle_id}';")
     rows = cur.fetchall()
+    cur.execute(f"DELETE FROM handles WHERE handle_id = '{handle_id}';")
+    conn.commit()
     conn.close()
     
     for e in rows:
