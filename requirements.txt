@@ -1,0 +1,17 @@
+# https://www.marekrost.cz/selenium-wire-how-to-resolve-blinker-saferef
+blinker==1.7.0
+# Decoding Pkgs
+zstd==1.5.5.1
+brotli==1.1.0
+# Selenium
+selenium-wire==5.1.0
+# Credentials
+python-dotenv==1.0.1
+# Database wrapper
+psycopg[binary]==3.1.19
+# telegram bot wrapper
+python-telegram-bot==21.1.1
+
+
+
+
