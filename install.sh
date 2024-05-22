@@ -25,7 +25,7 @@ pyenv install -s $PYTHON_VERSION
 
 # Create a new virtual environment using the specified Python version
 echo "Creating virtual environment..."
-pyenv virtualenv $PYTHON_VERSION myenv
+pyenv virtualenv $PYTHON_VERSION followsleuth
 
 # Activate the virtual environment
 echo "Activating virtual environment..."
