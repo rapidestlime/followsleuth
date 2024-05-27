@@ -8,6 +8,7 @@ Python-based Telegram Bot to track X.com Web3 profiles new followings
 - chromedriver (make sure version compatible with Chrome browser version, check on https://googlechromelabs.github.io/chrome-for-testing/)
 - ca.rt file (Download from https://raw.githubusercontent.com/wkeeling/selenium-wire/master/seleniumwire/ca.crt and add cert to trusted certificates in system)
 - secret.env (set up your own credentials)
+- PostgreSQL Database
 
 ## Overall Architecture
 ![alt text](architecture.png)
