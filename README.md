@@ -21,6 +21,6 @@ Python-based Telegram Bot to track X.com Web3 profiles new followings
 ![alt text](preview.gif)
 
 ## Future Improvements
-- Use webhook instead of long polling as long polling can be requests intensive (looking into FASTAPI)
+- Use webhook instead of long polling as long polling can be requests intensive (looking into FASTAPI) [Current Status: Successful as of 27/05/2024)]
 - Apache Airflow to run scraper.py
 - Look for alternatives ways or libraries for scraping as Selenium can be slow (looking into Playwright)
