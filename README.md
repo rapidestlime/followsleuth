@@ -8,7 +8,7 @@ Python-based Telegram Bot to track X.com Web3 profiles new followings
 - chromedriver (make sure version compatible with Chrome browser version, check on https://googlechromelabs.github.io/chrome-for-testing/)
 - ca.rt file (Download from https://raw.githubusercontent.com/wkeeling/selenium-wire/master/seleniumwire/ca.crt and add cert to trusted certificates in system)
 - secret.env (set up your own credentials)
-- PostgreSQL Database
+- PostgreSQL Database (https://www.digitalocean.com/community/tutorials/how-to-install-postgresql-on-ubuntu-22-04-quickstart#step-2-using-postgresql-roles-and-databases)
 
 ## Overall Architecture
 ![alt text](architecture.png)
