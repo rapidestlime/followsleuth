@@ -25,6 +25,10 @@ logger = logging.getLogger(__name__)
 ADDING = 1
 REMOVE = 1
 
+# Commands List
+VALID_COMMANDS = ['/start', '/help', '/register', '/add_handles', '/remove_handles', '/show_handles',\
+                   '/abort', '/stop', '/resume', '/destruct']
+
 # Define a few command handlers. These usually take the two arguments update and
 # context.
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -50,9 +54,9 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
     logger.info(f"effective_chat used `/help` command: {update.effective_chat.id}")
     await update.message.reply_text("""
                                     /register : add your chat to database for push updates
-                                    \n/add_handle : add one or more handles to database for tracking
+                                    \n/add_handles : add one or more handles to database for tracking
                                     \n/show_handles: show your current list of handles you are tracking
-                                    \n/remove_handle : remove an existing handle from database for tracking
+                                    \n/remove_handles : remove an existing handle from database for tracking
                                     \n/abort : cancel out any add_handle or remove_handle commands made
                                     \n/stop : stop tracking updates being pushed to chat (handles tracking list remains intact)
                                     \n/resume: resume tracking updates
@@ -65,7 +69,7 @@ async def register_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -
     """Send a message when the command /register is issued."""
     logger.info(f"effective_chat used `/register` command: {update.effective_chat.id}")
     
-    existing = existing_chat(chat_id=update.effective_chat.id)
+    existing = existing_chat(chat_info=update.effective_chat)
     if existing:
         await update.message.reply_text("🙂 You have already registered! 🙂")
     else:
@@ -78,8 +82,8 @@ async def register_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -
 
 
 async def add_handles(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    """Send a message when the command /add_handle is issued."""
-    logger.info(f"effective_chat used `/add_handle` command: {update.effective_chat.id}")
+    """Send a message when the command /add_handles is issued."""
+    logger.info(f"effective_chat used `/add_handles` command: {update.effective_chat.id}")
     
     existing = existing_chat(update.effective_chat.id)
     if existing:
@@ -91,7 +95,7 @@ async def add_handles(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int
         return ConversationHandler.END
 
 async def received_adding(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    """Send a message when user replies after command /add_handle is issued."""
+    """Send a message when user replies after command /add_handles is issued."""
     user_input = update.message.text
     await update.message.reply_text(f"Handles Added:\n{user_input}")
     add = add_handles_to_db(user_input=user_input, chat_id=update.effective_chat.id)
@@ -105,7 +109,7 @@ async def received_adding(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
 
 async def remove_handles(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     """Send a message when the command /remove_handles is issued."""
-    logger.info(f"effective_chat used `/add_handle` command: {update.effective_chat.id}")
+    logger.info(f"effective_chat used `/remove_handles` command: {update.effective_chat.id}")
     
     existing = existing_chat(update.effective_chat.id)
     if existing:
@@ -231,7 +235,7 @@ async def process_update(request: Request):
     req = await request.json()
     update = Update.de_json(req, ptb.bot)
     await ptb.process_update(update)
-    return Response(status_code=HTTPStatus.OK)
+    return Response(status_code=200)
 
 
 # on different commands - answer in Telegram
@@ -240,7 +244,7 @@ ptb.add_handler(CommandHandler("help", help_command))
 ptb.add_handler(CommandHandler("register", register_command))
 
 add_conv_handler = ConversationHandler(
-    entry_points=[CommandHandler('add_handle', add_handles)],
+    entry_points=[CommandHandler('add_handles', add_handles)],
     states={
         ADDING: [MessageHandler(filters.TEXT & ~filters.COMMAND, received_adding)],
     },
@@ -249,7 +253,7 @@ add_conv_handler = ConversationHandler(
 ptb.add_handler(add_conv_handler)
 
 remove_conv_handler = ConversationHandler(
-    entry_points=[CommandHandler('remove_handle', remove_handles)],
+    entry_points=[CommandHandler('remove_handles', remove_handles)],
     states={
         REMOVE: [MessageHandler(filters.TEXT & ~filters.COMMAND, received_remove)],
     },
@@ -263,7 +267,7 @@ ptb.add_handler(CommandHandler("resume", resume_command))
 ptb.add_handler(CommandHandler("destruct", destruct_command))
 
 # on non commands - echo the message on Telegram
-ptb.add_handler(MessageHandler(~filters.COMMAND, echo))
+ptb.add_handler(MessageHandler(filters.COMMAND & ~filters.UpdateFilter(VALID_COMMANDS), echo))
 
 
 

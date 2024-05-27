@@ -40,7 +40,7 @@ def existing_chat(chat_id) -> bool:
 
     return bool(row)
 
-def register_chat(chat_id) -> bool:
+def register_chat(chat_info) -> bool:
     "Save new user into database"
     conn = psycopg.connect(DATABASE_URL)
     cur = conn.cursor()
@@ -48,7 +48,7 @@ def register_chat(chat_id) -> bool:
     # Format the datetime object to a string
     timestamp_str = now_utc.strftime('%Y-%m-%d %H:%M:%S')
     try:
-        cur.execute(f"INSERT INTO users (chat_id, date_subscribed) VALUES ({chat_id},'{timestamp_str}');")
+        cur.execute(f"INSERT INTO users (chat_id, user_name, date_subscribed) VALUES ({chat_info.id},{chat_info.username},'{timestamp_str}');")
         conn.commit()
         conn.close()
         return True

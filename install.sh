@@ -19,6 +19,9 @@ if ! command -v pyenv &> /dev/null; then
     source ~/.bashrc
 fi
 
+# Install pip3
+apt-get -y install python3-pip
+
 # Install the specified Python version
 echo "Installing Python $PYTHON_VERSION..."
 pyenv install -s $PYTHON_VERSION
